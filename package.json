@@ -1,0 +1,22 @@
+{
+  "name": "app-bruno-cli-automation",
+  "version": "1.0.0",
+  "description": "API automation testing using Bruno CLI and GitHub Actions",
+  "main": "index.js",
+  "scripts": {
+    "test": "bru run ./bruno --reporter cli",
+    "test:json": "bru run ./bruno --reporter json"
+  },
+  "keywords": [
+    "api-testing",
+    "bruno",
+    "automation",
+    "github-actions",
+    "ci-cd"
+  ],
+  "author": "DevOps Engineer",
+  "license": "MIT",
+  "devDependencies": {
+    "@usebruno/cli": "latest"
+  }
+}
