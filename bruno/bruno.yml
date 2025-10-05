@@ -1,0 +1,4 @@
+name: JSONPlaceholder API Tests
+type: collection
+version: 1.0.0
+description: API automation tests for JSONPlaceholder public API
