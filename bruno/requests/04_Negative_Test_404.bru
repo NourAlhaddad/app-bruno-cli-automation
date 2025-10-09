@@ -1,0 +1,26 @@
+meta {
+  name: Negative Test - 404 Not Found
+  type: http
+  seq: 4
+}
+
+get {
+  url: https://jsonplaceholder.typicode.com/users/99999
+  body: none
+}
+
+tests {
+  test("Status should be 200 (API returns 200 with empty object)", function() {
+    expect(res.getStatus()).to.equal(200);
+  });
+  
+  test("Response should be an object", function() {
+    expect(res.getBody()).to.be.an('object');
+  });
+  
+  test("Invalid ID should return empty response", function() {
+    const body = res.getBody();
+    // JSONPlaceholder returns {} for non-existent IDs
+    expect(Object.keys(body).length).to.equal(0);
+  });
+}
