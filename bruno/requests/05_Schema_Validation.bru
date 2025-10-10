@@ -1,0 +1,55 @@
+meta {
+  name: Schema Validation Test
+  type: http
+  seq: 5
+}
+
+get {
+  url: https://jsonplaceholder.typicode.com/users/1
+  body: none
+}
+
+tests {
+  test("Response headers should include content-type", function() {
+    expect(res.getHeader('content-type')).to.include('json');
+  });
+  
+  test("User object schema validation", function() {
+    const user = res.getBody();
+    
+    // Check all required fields exist
+    expect(user).to.have.property('id');
+    expect(user).to.have.property('name');
+    expect(user).to.have.property('username');
+    expect(user).to.have.property('email');
+    expect(user).to.have.property('phone');
+    expect(user).to.have.property('website');
+    expect(user).to.have.property('company');
+    expect(user).to.have.property('address');
+  });
+  
+  test("Field types should be correct", function() {
+    const user = res.getBody();
+    
+    expect(user.id).to.be.a('number');
+    expect(user.name).to.be.a('string');
+    expect(user.username).to.be.a('string');
+    expect(user.email).to.be.a('string');
+    expect(user.company).to.be.an('object');
+    expect(user.address).to.be.an('object');
+  });
+  
+  test("Nested object validation", function() {
+    const user = res.getBody();
+    
+    // Check nested company object
+    expect(user.company).to.have.property('name');
+    expect(user.company.name).to.be.a('string');
+    
+    // Check nested address object
+    expect(user.address).to.have.property('street');
+    expect(user.address).to.have.property('city');
+    expect(user.address.street).to.be.a('string');
+    expect(user.address.city).to.be.a('string');
+  });
+}
