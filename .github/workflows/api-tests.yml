@@ -15,26 +15,38 @@ jobs:
         node-version: [18.x]
     
     steps:
+      # Checkout repository code
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
+      # Install Bruno CLI globally
       - name: Install Bruno CLI
         run: npm install -g @usebruno/cli
 
+      # Display installed Bruno version
       - name: Display Bruno version
         run: bru --version
 
-      # Move to bruno folder before running
+      # Run Bruno tests and generate HTML report
       - name: Run API Tests
         working-directory: ./bruno
-        run: bru run
+        run: bru run --reporter html > bruno-report.html
         continue-on-error: false
 
+      # Upload HTML report as an artifact
+      - name: Upload HTML report
+        uses: actions/upload-artifact@v3
+        with:
+          name: bruno-html-report
+          path: ./bruno/bruno-report.html
+
+      # Quick console summary
       - name: Test Summary
         if: always()
         run: |
@@ -43,5 +55,6 @@ jobs:
           echo "=========================================="
           echo "Tests executed using Bruno CLI"
           echo "Collection: bruno/bruno.json"
+          echo "HTML report uploaded as artifact: bruno-html-report"
           echo "API: JSONPlaceholder (https://jsonplaceholder.typicode.com)"
           echo "=========================================="
