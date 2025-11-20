@@ -1,0 +1,53 @@
+{
+  "name": "JSONPlaceholder API Tests",
+  "type": "collection",
+  "version": "1.0.0",
+  "description": "Complete API automation testing collection for JSONPlaceholder public API",
+  "requests": [
+    {
+      "name": "Get All Users",
+      "type": "http",
+      "uid": "get-all-users",
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/users",
+      "body": null,
+      "tests": "test(\"Status should be 200\", function() {\n  expect(res.getStatus()).to.equal(200);\n});\n\ntest(\"Response should be an array\", function() {\n  expect(res.getBody()).to.be.an('array');\n});\n\ntest(\"Should have at least 1 user\", function() {\n  const body = res.getBody();\n  expect(body.length).to.be.greaterThan(0);\n});\n\ntest(\"First user should have required fields\", function() {\n  const users = res.getBody();\n  const firstUser = users[0];\n  expect(firstUser).to.have.property('id');\n  expect(firstUser).to.have.property('name');\n  expect(firstUser).to.have.property('email');\n});"
+    },
+    {
+      "name": "Get User by ID",
+      "type": "http",
+      "uid": "get-user-by-id",
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/users/1",
+      "body": null,
+      "tests": "test(\"Status should be 200\", function() {\n  expect(res.getStatus()).to.equal(200);\n});\n\ntest(\"Response should be an object\", function() {\n  expect(res.getBody()).to.be.an('object');\n});\n\ntest(\"User ID should be 1\", function() {\n  const body = res.getBody();\n  expect(body.id).to.equal(1);\n});\n\ntest(\"User should have correct name\", function() {\n  const body = res.getBody();\n  expect(body.name).to.equal('Leanne Graham');\n});\n\ntest(\"User should have email property\", function() {\n  const body = res.getBody();\n  expect(body.email).to.exist;\n  expect(body.email).to.be.a('string');\n});"
+    },
+    {
+      "name": "Get Posts with Query Params",
+      "type": "http",
+      "uid": "get-posts",
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/posts?userId=1",
+      "body": null,
+      "tests": "test(\"Status should be 200\", function() {\n  expect(res.getStatus()).to.equal(200);\n});\n\ntest(\"Response should be an array\", function() {\n  expect(res.getBody()).to.be.an('array');\n});\n\ntest(\"Should have posts for userId 1\", function() {\n  const posts = res.getBody();\n  expect(posts.length).to.be.greaterThan(0);\n});\n\ntest(\"All posts should have userId 1\", function() {\n  const posts = res.getBody();\n  posts.forEach(post => {\n    expect(post.userId).to.equal(1);\n  });\n});\n\ntest(\"Each post should have required fields\", function() {\n  const posts = res.getBody();\n  posts.forEach(post => {\n    expect(post).to.have.property('id');\n    expect(post).to.have.property('title');\n    expect(post).to.have.property('body');\n    expect(post).to.have.property('userId');\n  });\n});"
+    },
+    {
+      "name": "Negative Test - 404 Not Found",
+      "type": "http",
+      "uid": "negative-test-404",
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/users/99999",
+      "body": null,
+      "tests": "test(\"Status should be 200 (API returns 200 with empty object)\", function() {\n  expect(res.getStatus()).to.equal(200);\n});\n\ntest(\"Response should be an object\", function() {\n  expect(res.getBody()).to.be.an('object');\n});\n\ntest(\"Invalid ID should return empty response\", function() {\n  const body = res.getBody();\n  expect(Object.keys(body).length).to.equal(0);\n});"
+    },
+    {
+      "name": "Schema Validation Test",
+      "type": "http",
+      "uid": "schema-validation",
+      "method": "GET",
+      "url": "https://jsonplaceholder.typicode.com/users/1",
+      "body": null,
+      "tests": "test(\"Response headers should include content-type\", function() {\n  expect(res.getHeader('content-type')).to.include('json');\n});\n\ntest(\"User object schema validation\", function() {\n  const user = res.getBody();\n  \n  expect(user).to.have.property('id');\n  expect(user).to.have.property('name');\n  expect(user).to.have.property('username');\n  expect(user).to.have.property('email');\n  expect(user).to.have.property('phone');\n  expect(user).to.have.property('website');\n  expect(user).to.have.property('company');\n  expect(user).to.have.property('address');\n});\n\ntest(\"Field types should be correct\", function() {\n  const user = res.getBody();\n  \n  expect(user.id).to.be.a('number');\n  expect(user.name).to.be.a('string');\n  expect(user.username).to.be.a('string');\n  expect(user.email).to.be.a('string');\n  expect(user.company).to.be.an('object');\n  expect(user.address).to.be.an('object');\n});\n\ntest(\"Nested object validation\", function() {\n  const user = res.getBody();\n  \n  expect(user.company).to.have.property('name');\n  expect(user.company.name).to.be.a('string');\n  \n  expect(user.address).to.have.property('street');\n  expect(user.address).to.have.property('city');\n  expect(user.address.street).to.be.a('string');\n  expect(user.address.city).to.be.a('string');\n});"
+    }
+  ]
+}
