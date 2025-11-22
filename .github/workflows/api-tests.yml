@@ -36,11 +36,12 @@ jobs:
       # Run Bruno tests and generate HTML report
       - name: Run API Tests
         working-directory: ./bruno
-        run: bru run --reporter html > bruno-report.html
+        run: bru run --reporter-html bruno-report.html
         continue-on-error: false
 
-      # Upload HTML report as an artifact
+      # Upload HTML report
       - name: Upload HTML report
+        if: ${{ !env.ACT }}
         uses: actions/upload-artifact@v3
         with:
           name: bruno-html-report
