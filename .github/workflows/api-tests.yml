@@ -42,7 +42,7 @@ jobs:
       # Upload HTML report
       - name: Upload HTML report
         if: ${{ !env.ACT }}
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: bruno-html-report
           path: ./bruno/bruno-report.html
