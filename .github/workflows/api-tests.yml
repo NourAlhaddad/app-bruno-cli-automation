@@ -15,30 +15,37 @@ jobs:
         node-version: [18.x]
     
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-    
-    - name: Set up Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-    
-    - name: Install Bruno CLI
-      run: npm install -g @usebruno/cli
-    
-    - name: Display Bruno version
-      run: bru --version
-    
-    - name: Run API Tests
-      run: bru run ./bruno --reporter cli
-      continue-on-error: false
-    
-    - name: Test Summary
-      if: always()
-      run: |
-        echo "=========================================="
-        echo "API Automation Test Run Complete"
-        echo "=========================================="
-        echo "Tests executed using Bruno CLI"
-        echo "API: JSONPlaceholder (https://jsonplaceholder.typicode.com)"
-        echo "=========================================="
+      # Checkout repository code
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      # Install Bruno CLI globally
+      - name: Install Bruno CLI
+        run: npm install -g @usebruno/cli
+
+      # Display installed Bruno version
+      - name: Display Bruno version
+        run: bru --version
+
+      # Run the Bruno JSON collection
+      - name: Run API Tests
+        run: bru run ./bruno/bruno.json --reporter cli
+        continue-on-error: false
+
+      # Summary of the test run
+      - name: Test Summary
+        if: always()
+        run: |
+          echo "=========================================="
+          echo "API Automation Test Run Complete"
+          echo "=========================================="
+          echo "Tests executed using Bruno CLI"
+          echo "Collection: bruno/bruno.json"
+          echo "API: JSONPlaceholder (https://jsonplaceholder.typicode.com)"
+          echo "=========================================="
