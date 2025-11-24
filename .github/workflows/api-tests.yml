@@ -15,30 +15,24 @@ jobs:
         node-version: [18.x]
     
     steps:
-      # Checkout repository code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node-version }}
 
-      # Install Bruno CLI globally
       - name: Install Bruno CLI
         run: npm install -g @usebruno/cli
 
-      # Display installed Bruno version
       - name: Display Bruno version
         run: bru --version
 
-      # Run the Bruno JSON collection
       - name: Run API Tests
-        run: bru run ./bruno/bruno.json --reporter cli
+        run: bru run ./bruno/bruno.json
         continue-on-error: false
 
-      # Summary of the test run
       - name: Test Summary
         if: always()
         run: |
