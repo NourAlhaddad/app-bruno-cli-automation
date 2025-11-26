@@ -29,8 +29,10 @@ jobs:
       - name: Display Bruno version
         run: bru --version
 
+      # Move to bruno folder before running
       - name: Run API Tests
-        run: bru run ./bruno/bruno.json
+        working-directory: ./bruno
+        run: bru run
         continue-on-error: false
 
       - name: Test Summary
