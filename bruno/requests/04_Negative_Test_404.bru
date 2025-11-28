@@ -10,8 +10,8 @@ get {
 }
 
 tests {
-  test("Status should be 200 (API returns 200 with empty object)", function() {
-    expect(res.getStatus()).to.equal(200);
+  test("Status should be 404 for non-existent user", function() {
+    expect(res.getStatus()).to.equal(404);
   });
   
   test("Response should be an object", function() {
